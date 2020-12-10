@@ -4,4 +4,4 @@
   tasks:
     - name: "Include my-new-role"
       include_role:
-        name: "my-new-role"
+        name: "ansible-role-lego"

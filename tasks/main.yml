@@ -1,2 +1,18 @@
 ---
-# tasks file for my-new-role
+- name: Download lego binary
+  get_url:
+    url: "https://github.com/go-acme/lego/releases/download/v{{ lego_ver }}/lego_v{{ lego_ver }}_linux_amd64.tar.gz"
+    dest: "/usr/local/src/lego_v{{ lego_ver }}_linux_amd64.tar.gz"
+    mode: '0644'
+
+- name: fff
+  file:
+    path: "/usr/local/src/lego-v{{ lego_ver }}"
+    state: directory
+    mode: '0755'
+
+- name: Extract foo.tgz into /var/lib/foo
+  unarchive:
+    src: "/usr/local/src/lego_v{{ lego_ver }}_linux_amd64.tar.gz"
+    dest: "/usr/local/src/lego-v{{ lego_ver }}"
+    remote_src: true
