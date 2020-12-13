@@ -4,7 +4,7 @@
   gather_facts: false
   tasks:
     - name: loge -v
-      command: lego -v
+      command: lego -v  # noqa 301
       register: lego_v
     - name: ddd
       assert:

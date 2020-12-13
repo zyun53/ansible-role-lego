@@ -36,4 +36,4 @@
 - include_tasks: cert.yml
   with_items: "{{ lego_certs }}"
   loop_control:
-    loop_var: cert
+    loop_var: certs
