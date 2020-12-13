@@ -1,18 +1,39 @@
 ---
-- name: Download lego binary
+- name: Download lego binary from GitHub release.
   get_url:
     url: "https://github.com/go-acme/lego/releases/download/v{{ lego_ver }}/lego_v{{ lego_ver }}_linux_amd64.tar.gz"
     dest: "/usr/local/src/lego_v{{ lego_ver }}_linux_amd64.tar.gz"
     mode: '0644'
 
-- name: fff
+- name: Ensure unarchive directory exists.
   file:
     path: "/usr/local/src/lego-v{{ lego_ver }}"
     state: directory
     mode: '0755'
 
-- name: Extract foo.tgz into /var/lib/foo
+- name: Extract tar.gz into directory.
   unarchive:
     src: "/usr/local/src/lego_v{{ lego_ver }}_linux_amd64.tar.gz"
     dest: "/usr/local/src/lego-v{{ lego_ver }}"
     remote_src: true
+
+- name: Copy lego binary to bin
+  copy:
+    src: "/usr/local/src/lego-v{{ lego_ver }}/lego"
+    dest: /usr/local/bin/lego
+    mode: '0755'
+    remote_src: true
+
+- name: Ensure lego config directory exists.
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0750'
+  with_items:
+    - /etc/lego
+    - /etc/lego/cron
+
+- include_tasks: cert.yml
+  with_items: "{{ lego_certs }}"
+  loop_control:
+    loop_var: cert

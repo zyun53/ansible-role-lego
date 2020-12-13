@@ -1,0 +1,23 @@
+---
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/lego/certificates/{{ cert.domains | first | replace('*.', '') }}.crt
+  register: cert_file
+
+- name: Template a file cron create script
+  template:
+    src: cloud.j2
+    dest: /etc/lego/cron/{{ cert.domains | first | replace('*.', '') }}
+    mode: '0750'
+
+- name: Run command Create a new cert
+  command: /etc/lego/cron/{{ cert.domains | first | replace('*.', '') }} run
+  when: not cert_file.stat.exists and cert_file.create_new is defined
+
+- name: Add cert renewal cron job
+  cron:
+    name: "lego automatic renewal {{ cert.domains | first | replace('*.', '') }}"
+    job: "/etc/lego/cron/{{ cert.domains | first | replace('*.', '') }} renew"
+    minute: "10"
+    hour: "10"
+    user: root

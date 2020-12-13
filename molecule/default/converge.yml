@@ -1,7 +1,28 @@
 ---
 - name: Converge
   hosts: all
+  pre_tasks:
+    - name: Update apt cache.
+      apt:
+        update_cache: true
+        cache_valid_time: 600
+      when: ansible_os_family == 'Debian'
+      changed_when: false
+    - name: Install cron.
+      package:
+        name: cron
+        state: present
   tasks:
     - name: "Include my-new-role"
       include_role:
         name: "ansible-role-lego"
+  vars:
+    lego_certs:
+      - email: letsencrypt@example.com
+        domains:
+          - example.com
+          - www.example.com
+        dns: cloudflare
+        envs:
+          - CLOUDFLARE_DNS_API_TOKEN=example
+        server: https://acme-staging-v02.api.letsencrypt.org/directory

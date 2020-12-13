@@ -1,0 +1,20 @@
+#!/bin/sh
+
+{% if cert.envs is defined %}
+{% for item in cert.envs %}
+export {{ item }}
+{% endfor %}
+{% endif %}
+
+/usr/local/bin/lego \
+    --path /etc/lego \
+    --email {{ cert.email }} \
+    {% for item in cert.domains %}
+    --domains '{{ item }}' \
+    {% endfor %}
+    --server {{ cert.server | default('https://acme-v02.api.letsencrypt.org/directory') }} \
+    {% if cert.dns is defined %}
+    --dns {{ cert.dns }} \
+    {% endif %}
+    -a \
+    $1
