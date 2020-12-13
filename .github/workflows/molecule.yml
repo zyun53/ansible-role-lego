@@ -3,12 +3,15 @@ name: Molecule Test
 on:
   - push
   - pull_request
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
       - name: molecule
         uses: robertdebock/molecule-action@2.6.3
         with:
@@ -20,16 +23,13 @@ jobs:
     strategy:
       matrix:
         image:
-          - alpine
-          - amazonlinux
-          - debian
           - centos
-          - fedora
-          - opensuse
           - ubuntu
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
       - name: molecule
         uses: robertdebock/molecule-action@2.6.8
         with:
