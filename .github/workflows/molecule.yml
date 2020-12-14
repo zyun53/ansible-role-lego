@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -19,12 +19,7 @@ jobs:
   test:
     needs:
       - lint
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image:
-          - centos
-          - ubuntu
+    runs-on: ubuntu-20.04
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -32,6 +27,3 @@ jobs:
           path: "${{ github.repository }}"
       - name: molecule
         uses: robertdebock/molecule-action@2.6.8
-        with:
-          image: "${{ matrix.image }}"
-          options: parallel
