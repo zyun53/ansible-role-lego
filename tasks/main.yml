@@ -16,6 +16,7 @@
     src: "/usr/local/src/lego_v{{ lego_ver }}_linux_amd64.tar.gz"
     dest: "/usr/local/src/lego-v{{ lego_ver }}"
     remote_src: true
+    mode: '0755'
 
 - name: Copy lego binary to bin
   copy:
